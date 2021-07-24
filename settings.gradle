@@ -1,0 +1,2 @@
+rootProject.name = "DocPlus"
+include ':app'
