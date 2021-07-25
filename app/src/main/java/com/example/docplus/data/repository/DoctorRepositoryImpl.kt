@@ -1,5 +1,6 @@
 package com.example.docplus.data.repository
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.docplus.data.model.DoctorEntity
 import com.example.docplus.data.dao.DoctorDao
@@ -12,13 +13,25 @@ class DoctorRepositoryImpl(
     private val dao: DoctorDao
 ) : DoctorRepository {
 
-    override suspend fun getAll() = withContext(Dispatchers.IO) {
-        Transformations.map(dao.getAll()) { list ->
-            list.map {
-                Doctor(it.id, it.type, it.name, it.time /*it.visits*/)
-            }
+    override suspend fun getAll(): LiveData<List<Doctor>> {
+//        withContextithContext(Dispatchers.IO) {
+            return Transformations.map(dao.getAll()) { list ->
+                list.map {
+                    Doctor(it.id, it.type, it.name, it.time /*it.visits*/)
+                }
+//            }
         }
     }
+
+//    override suspend fun getAll() = withContext(Dispatchers.IO) {
+//        Transformations.map(dao.getAll()) { list ->
+//            list.map {
+//                Doctor(it.id, it.type, it.name, it.time /*it.visits*/)
+//            }
+//        }
+//    }
+
+
 
     override suspend fun save(doctor: Doctor) =
         withContext(Dispatchers.IO) {

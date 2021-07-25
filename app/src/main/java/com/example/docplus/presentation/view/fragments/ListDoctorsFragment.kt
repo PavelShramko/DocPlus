@@ -22,7 +22,6 @@ class ListDoctorsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getData()
     }
 
     override fun onCreateView(

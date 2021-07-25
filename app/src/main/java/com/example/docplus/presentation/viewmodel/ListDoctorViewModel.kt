@@ -4,11 +4,12 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.docplus.data.db.AppDataBase
-import com.example.docplus.data.model.DoctorEntity
+import com.example.docplus.data.repository.DoctorRepositoryImpl
 import com.example.docplus.domain.Doctor
 import com.example.docplus.domain.DoctorRepository
-import com.example.docplus.data.repository.DoctorRepositoryImpl
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private val empty = Doctor(
     id = 0,
@@ -18,21 +19,22 @@ private val empty = Doctor(
     //visits = null
 )
 
-class ListDoctorViewModel(application: Application) : AndroidViewModel(application)  {
+class ListDoctorViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _listOfDoctors = MutableLiveData<List<Doctor>>()
-    val listOfDoctor: LiveData<List<Doctor>>
-        get() = _listOfDoctors
+    val listOfDoctor: LiveData<List<Doctor>> = _listOfDoctors
 
-     private val repository: DoctorRepository = DoctorRepositoryImpl(
+    private val repository: DoctorRepository = DoctorRepositoryImpl(
         AppDataBase.getInstance(context = application).docDao()
     )
 
     val edited = MutableLiveData(empty)
 
-    fun getData(){
+    init {
         _listOfDoctors = liveData<List<Doctor>> {
-            repository.getAll()
+            withContext(Dispatchers.IO) {
+                repository.getAll()
+            }
         } as MutableLiveData<List<Doctor>>
     }
 
@@ -67,7 +69,7 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     // Функция, которая будет открывать историю посещений
-    fun click (doctor: Doctor){
+    fun click(doctor: Doctor) {
         Log.d("kekpek", "${doctor.id} ${doctor.name}  ${doctor.type}")
     }
 }
