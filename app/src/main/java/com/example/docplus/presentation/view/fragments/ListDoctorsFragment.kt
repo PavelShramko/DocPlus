@@ -16,9 +16,7 @@ import com.example.docplus.presentation.viewmodel.ListDoctorViewModel
 
 class ListDoctorsFragment : Fragment() {
 
-    private val viewModel: ListDoctorViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: ListDoctorViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
