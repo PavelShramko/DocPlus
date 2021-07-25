@@ -33,7 +33,7 @@ abstract class AppDataBase : RoomDatabase() {
         // Вывести работу в фоновый поток
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(context, AppDataBase::class.java, "appdata.db")
-                //.allowMainThreadQueries()
+                .allowMainThreadQueries()
                 .build()
     }
 }
