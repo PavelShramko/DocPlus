@@ -2,9 +2,9 @@ package com.example.docplus.presentation.viewmodel
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.example.docplus.data.db.AppDataBase
+import com.example.docplus.data.model.DoctorEntity
 import com.example.docplus.domain.Doctor
 import com.example.docplus.domain.DoctorRepository
 import com.example.docplus.data.repository.DoctorRepositoryImpl
@@ -20,18 +20,31 @@ private val empty = Doctor(
 
 class ListDoctorViewModel(application: Application) : AndroidViewModel(application)  {
 
-    private val repository: DoctorRepository = DoctorRepositoryImpl(
+    private var _listOfDoctors = MutableLiveData<List<Doctor>>()
+    val listOfDoctor: LiveData<List<Doctor>>
+        get() = _listOfDoctors
+
+     private val repository: DoctorRepository = DoctorRepositoryImpl(
         AppDataBase.getInstance(context = application).docDao()
     )
 
-    val data = repository.getAll()
     val edited = MutableLiveData(empty)
 
+    fun getData(){
+        _listOfDoctors = liveData<List<Doctor>> {
+            repository.getAll()
+        } as MutableLiveData<List<Doctor>>
+    }
+
     fun save() {
-        edited.value?.let {
-            repository.save(it)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                edited.value?.let {
+                    repository.save(it)
+                }
+            }
+            edited.value = empty
         }
-        edited.value = empty
     }
 
     fun changeContent(type: String, name: String, time: String) {
@@ -47,7 +60,11 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
         edited.value = edited.value?.copy(type = editType, name = editName, time = edinTime)
     }
 
-    fun removeById(id: Long) = repository.removeById(id)
+    fun removeById(id: Long) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            repository.removeById(id)
+        }
+    }
 
     // Функция, которая будет открывать историю посещений
     fun click (doctor: Doctor){

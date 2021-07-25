@@ -13,12 +13,8 @@ import kotlinx.coroutines.SupervisorJob
 
 @Database(entities = [DoctorEntity::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {
-    abstract fun docDao(): DoctorDao
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        Log.v("Error", throwable.message.toString())
-    }
-    private val scope = CoroutineScope(SupervisorJob() + exceptionHandler)
+    abstract fun docDao(): DoctorDao
 
     companion object {
         @Volatile
@@ -30,10 +26,7 @@ abstract class AppDataBase : RoomDatabase() {
             }
         }
 
-        // Вывести работу в фоновый поток
         private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context, AppDataBase::class.java, "appdata.db")
-                //.allowMainThreadQueries()
-                .build()
+            Room.databaseBuilder(context, AppDataBase::class.java, "appdata.db").build()
     }
 }

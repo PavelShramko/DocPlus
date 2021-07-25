@@ -20,6 +20,11 @@ class ListDoctorsFragment : Fragment() {
         ownerProducer = ::requireParentFragment
     )
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.getData()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,7 +43,7 @@ class ListDoctorsFragment : Fragment() {
         })
 
         binding.rvDoctors.adapter = adapter
-        viewModel.data.observe(viewLifecycleOwner, { doctors ->
+        viewModel.listOfDoctor.observe(viewLifecycleOwner, { doctors ->
             adapter.submitList(doctors)
         })
 
