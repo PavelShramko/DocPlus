@@ -68,6 +68,10 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
+    fun edit(doctor: Doctor) {
+        // юзкейс
+    }
+
     // Функция, которая будет открывать историю посещений
     fun click(doctor: Doctor) {
         Log.d("kekpek", "${doctor.id} ${doctor.name}  ${doctor.type}")

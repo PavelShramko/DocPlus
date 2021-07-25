@@ -7,9 +7,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.docplus.data.dao.DoctorDao
 import com.example.docplus.data.model.DoctorEntity
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 
 @Database(entities = [DoctorEntity::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {

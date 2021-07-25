@@ -16,9 +16,7 @@ import com.example.docplus.presentation.viewmodel.ListDoctorViewModel
 
 class ListDoctorsFragment : Fragment() {
 
-    private val viewModel: ListDoctorViewModel by viewModels(
-        ownerProducer = ::requireParentFragment
-    )
+    private val viewModel: ListDoctorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +36,14 @@ class ListDoctorsFragment : Fragment() {
         val adapter = DoctorsAdapter(object : OnInteractionListener {
             override fun onClick(doctor: Doctor) {
                 viewModel.click(doctor)
+            }
+
+            override fun onEdit(doctor: Doctor) {
+                viewModel.edit(doctor)
+            }
+
+            override fun onRemove(doctor: Doctor) {
+                viewModel.removeById(doctor.id)
             }
         })
 
