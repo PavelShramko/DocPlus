@@ -33,6 +33,14 @@ class ListDoctorsFragment : Fragment() {
             override fun onClick(doctor: Doctor) {
                 viewModel.click(doctor)
             }
+
+            override fun onEdit(doctor: Doctor) {
+                viewModel.edit(doctor)
+            }
+
+            override fun onRemove(doctor: Doctor) {
+                viewModel.removeById(doctor.id)
+            }
         })
 
         binding.rvDoctors.adapter = adapter

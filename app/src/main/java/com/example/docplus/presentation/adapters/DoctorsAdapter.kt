@@ -2,14 +2,18 @@ package com.example.docplus.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.docplus.R
 import com.example.docplus.domain.Doctor
 import com.example.docplus.databinding.DoctorHolderBinding
 
 interface OnInteractionListener {
     fun onClick(doctor: Doctor) {}
+    fun onEdit(doctor: Doctor) {}
+    fun onRemove(doctor: Doctor) {}
 }
 
 class DoctorsAdapter(
@@ -37,6 +41,26 @@ class DoctorViewHolder(
             typeDoctor.text = doctor.type
             nameDoctor.text = doctor.name
             lastVisit.text = doctor.time
+
+            menu.setOnClickListener {
+                PopupMenu(it.context, it).apply {
+                    inflate(R.menu.menu_doctors)
+                    setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.remove -> {
+                                onInteractionListener.onRemove(doctor)
+                                true
+                            }
+                            R.id.edit -> {
+                                onInteractionListener.onEdit(doctor)
+                                true
+                            }
+
+                            else -> false
+                        }
+                    }
+                }.show()
+            }
 
             containerHolder.setOnClickListener {
                 onInteractionListener.onClick(doctor)
