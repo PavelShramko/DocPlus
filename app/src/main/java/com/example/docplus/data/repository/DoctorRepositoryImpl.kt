@@ -23,21 +23,27 @@ class DoctorRepositoryImpl(
         }
     }*/
 
-    override suspend fun getAll() = withContext(Dispatchers.IO) {
+   /* override suspend fun getAll() = withContext(Dispatchers.IO) {
         Transformations.map(dao.getAll()) { list ->
             list.map {
+                Doctor(it.id, it.type, it.name, it.time *//*it.visits*//*)
+            }
+        }
+    }*/
+
+    override suspend fun getAll() = withContext(Dispatchers.Main) {
+        Transformations.map(dao.getAll()) { list ->
+            list.map {
+                // добавить лог
                 Doctor(it.id, it.type, it.name, it.time /*it.visits*/)
             }
         }
     }
 
-
-
     override suspend fun save(doctor: Doctor) =
         withContext(Dispatchers.IO) {
             dao.save(DoctorEntity.fromDto(doctor))
         }
-
 
     override suspend fun removeById(id: Long) =
         withContext(Dispatchers.IO) {

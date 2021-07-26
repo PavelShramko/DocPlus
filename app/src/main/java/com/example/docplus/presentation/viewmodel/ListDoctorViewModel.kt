@@ -24,6 +24,7 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
     private var _listOfDoctors = MutableLiveData<List<Doctor>>()
     val listOfDoctor: LiveData<List<Doctor>> = _listOfDoctors
 
+    // Перенести в диай
     private val repository: DoctorRepository = DoctorRepositoryImpl(
         AppDataBase.getInstance(context = application).docDao()
     )
@@ -31,11 +32,15 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
     val edited = MutableLiveData(empty)
 
     init {
+        // попробовать убрать лайвдату
         _listOfDoctors = liveData<List<Doctor>> {
-            withContext(Dispatchers.IO) {
                 repository.getAll()
-            }
         } as MutableLiveData<List<Doctor>>
+    }
+
+    init {
+        // попробовать убрать лайвдату
+        _listOfDoctors = repository.getAll() as MutableLiveData<List<Doctor>>
     }
 
     fun save() {
