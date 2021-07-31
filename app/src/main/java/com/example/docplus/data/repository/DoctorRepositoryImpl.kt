@@ -1,5 +1,6 @@
 package com.example.docplus.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.docplus.data.model.DoctorEntity
@@ -31,11 +32,20 @@ class DoctorRepositoryImpl(
         }
     }*/
 
-    override suspend fun getAll() = withContext(Dispatchers.Main) {
+    /*override suspend fun getAll() = withContext(Dispatchers.Main) {
         Transformations.map(dao.getAll()) { list ->
             list.map {
                 // добавить лог
-                Doctor(it.id, it.type, it.name, it.time /*it.visits*/)
+                Doctor(it.id, it.type, it.name, it.time *//*it.visits*//*)
+            }
+        }
+    }*/
+
+    override fun getAll(): LiveData<List<Doctor>> {
+        return Transformations.map(dao.getAll()) { list ->
+            list.map {
+                // добавить лог
+                Doctor(it.id, it.type, it.name, it.time )
             }
         }
     }

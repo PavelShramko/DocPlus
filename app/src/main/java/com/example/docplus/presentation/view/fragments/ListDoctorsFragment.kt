@@ -1,6 +1,7 @@
 package com.example.docplus.presentation.view.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,6 @@ class ListDoctorsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //viewModel.getData()
     }
 
     override fun onCreateView(
@@ -49,9 +49,10 @@ class ListDoctorsFragment : Fragment() {
         })
 
         binding.rvDoctors.adapter = adapter
-        viewModel.listOfDoctor.observe(viewLifecycleOwner, { doctors ->
+        viewModel.listOfDoctors.observe(viewLifecycleOwner, { doctors ->
             adapter.submitList(doctors)
         })
+        Log.d("Kekpek1", viewModel.listOfDoctors.value.toString())
 
         binding.addDoctorButton.setOnClickListener {
             findNavController().navigate(R.id.action_listDoctorsFragment_to_addDoctorFragment)

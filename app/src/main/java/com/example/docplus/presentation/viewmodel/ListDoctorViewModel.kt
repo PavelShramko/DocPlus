@@ -21,8 +21,8 @@ private val empty = Doctor(
 
 class ListDoctorViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var _listOfDoctors = MutableLiveData<List<Doctor>>()
-    val listOfDoctor: LiveData<List<Doctor>> = _listOfDoctors
+    var _listOfDoctors = MutableLiveData<List<Doctor>>()
+    var listOfDoctors: LiveData<List<Doctor>>
 
     // Перенести в диай
     private val repository: DoctorRepository = DoctorRepositoryImpl(
@@ -32,15 +32,17 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
     val edited = MutableLiveData(empty)
 
     init {
-        // попробовать убрать лайвдату
-        _listOfDoctors = liveData<List<Doctor>> {
-                repository.getAll()
+        /*_listOfDoctors = liveData<List<Doctor>> {
+            repository.getAll()
         } as MutableLiveData<List<Doctor>>
-    }
+        listOfDoctors = _listOfDoctors*/
 
-    init {
-        // попробовать убрать лайвдату
         _listOfDoctors = repository.getAll() as MutableLiveData<List<Doctor>>
+
+        listOfDoctors = _listOfDoctors
+
+        Log.d("Kekpek2", listOfDoctors.value.toString())
+        Log.d("Kekpek3", _listOfDoctors.value.toString())
     }
 
     fun save() {
@@ -52,6 +54,7 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
             }
             edited.value = empty
         }
+        Log.d("Kekpek4", edited.value.toString())
     }
 
     fun changeContent(type: String, name: String, time: String) {
