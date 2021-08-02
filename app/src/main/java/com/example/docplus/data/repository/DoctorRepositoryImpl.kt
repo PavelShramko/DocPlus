@@ -14,33 +14,6 @@ class DoctorRepositoryImpl(
     private val dao: DoctorDao
 ) : DoctorRepository {
 
-    /*override suspend fun getAll(): LiveData<List<Doctor>> {
-        //withContext(Dispatchers.IO) {
-            return Transformations.map(dao.getAll()) { list ->
-                list.map {
-                    Doctor(it.id, it.type, it.name, it.time *//*it.visits*//*)
-                }
-            }
-        }
-    }*/
-
-   /* override suspend fun getAll() = withContext(Dispatchers.IO) {
-        Transformations.map(dao.getAll()) { list ->
-            list.map {
-                Doctor(it.id, it.type, it.name, it.time *//*it.visits*//*)
-            }
-        }
-    }*/
-
-    /*override suspend fun getAll() = withContext(Dispatchers.Main) {
-        Transformations.map(dao.getAll()) { list ->
-            list.map {
-                // добавить лог
-                Doctor(it.id, it.type, it.name, it.time *//*it.visits*//*)
-            }
-        }
-    }*/
-
     override fun getAll(): LiveData<List<Doctor>> {
         return Transformations.map(dao.getAll()) { list ->
             list.map {
@@ -49,6 +22,17 @@ class DoctorRepositoryImpl(
             }
         }
     }
+
+    /*override suspend fun getAll(): LiveData<List<Doctor>> {
+        return withContext(Dispatchers.IO) {
+            Transformations.map(dao.getAll()) { list ->
+                list.map {
+                    // добавить лог
+                    Doctor(it.id, it.type, it.name, it.time)
+                }
+            }
+        }
+    }*/
 
     override suspend fun save(doctor: Doctor) =
         withContext(Dispatchers.IO) {
