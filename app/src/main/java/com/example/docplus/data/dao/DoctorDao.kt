@@ -18,6 +18,8 @@ interface DoctorDao {
     @Insert
     fun insert(doctor: DoctorEntity)
 
+    // TODO 1: метод хорош с точки зрения инкапсуляции логики в ДАО, но предполагаю что есть более элегантный способ
+    // решения такой задачи с использованием аннотаций при конфликтах. См. @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(doctor: DoctorEntity) =
         if (doctor.id == 0L) insert(doctor) else updateContentById(doctor.id, doctor.type, doctor.name, doctor.time)
 

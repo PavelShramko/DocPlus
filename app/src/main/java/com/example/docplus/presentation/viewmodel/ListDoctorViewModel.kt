@@ -1,6 +1,8 @@
 package com.example.docplus.presentation.viewmodel
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.docplus.data.db.AppDataBase
@@ -21,11 +23,12 @@ private val empty = Doctor(
     //visits = null
 )
 
+// TODO: нужно быть уверенным что тебе действительно нужен контекст внутри твоей вью модели.
 class ListDoctorViewModel(application: Application) : AndroidViewModel(application) {
 
-    var _listOfDoctors = MutableLiveData<List<Doctor>>()
-    var listOfDoctors: LiveData<List<Doctor>>
-    val appComponent = DaggerAppComponent.create()
+    //    private var _listOfDoctors = MutableLiveData<List<Doctor>>()
+    val listOfDoctors: LiveData<List<Doctor>>
+        get() = getDoctorsLiveData()
 
     // Перенести в диай
     /*private val repository: DoctorRepository = DoctorRepositoryImpl(
@@ -33,16 +36,19 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
         )
     )*/
 
-    var repository: DoctorRepository = appComponent.repository
+    @Inject
+    lateinit var repository: DoctorRepository
+
+    // TODO: the initial way to create repo - can be removed
+    // var repository: DoctorRepository = DoctorRepositoryImpl(AppDataBase.getInstance(application).docDao())
+
+    // TODO lead to java.lang.Object android.content.Context.getSystemService(java.lang.String)' on a null object reference
+//    val repository = appComponent.repository
 
     val edited = MutableLiveData(empty)
 
-    init {
-        _listOfDoctors = repository.getAll() as MutableLiveData<List<Doctor>>
-        listOfDoctors = _listOfDoctors
-
-        Log.d("Kekpek2", listOfDoctors.value.toString())
-        Log.d("Kekpek3", _listOfDoctors.value.toString())
+    fun getDoctorsLiveData(): LiveData<List<Doctor>> {
+        return repository.getAll()
     }
 
     /*init {
@@ -57,11 +63,9 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
     }*/
 
     fun save() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                edited.value?.let {
-                    repository.save(it)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            edited.value?.let {
+                repository.save(it)
             }
             edited.value = empty
         }
