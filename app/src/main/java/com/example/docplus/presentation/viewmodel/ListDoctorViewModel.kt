@@ -18,54 +18,29 @@ private val empty = Doctor(
     type = "",
     name = "",
     time = ""
-    //visits = null
 )
 
 class ListDoctorViewModel(application: Application) : AndroidViewModel(application) {
 
-    var _listOfDoctors = MutableLiveData<List<Doctor>>()
-    var listOfDoctors: LiveData<List<Doctor>>
-    val appComponent = DaggerAppComponent.create()
+    val listOfDoctors: LiveData<List<Doctor>>
+        get() = getDoctorsLiveData()
 
-    // Перенести в диай
-    /*private val repository: DoctorRepository = DoctorRepositoryImpl(
-        AppDataBase.getInstance(context = application).docDao(
-        )
-    )*/
-
-    var repository: DoctorRepository = appComponent.repository
+    @Inject
+    lateinit var repository: DoctorRepository
 
     val edited = MutableLiveData(empty)
 
-    init {
-        _listOfDoctors = repository.getAll() as MutableLiveData<List<Doctor>>
-        listOfDoctors = _listOfDoctors
-
-        Log.d("Kekpek2", listOfDoctors.value.toString())
-        Log.d("Kekpek3", _listOfDoctors.value.toString())
+    fun getDoctorsLiveData(): LiveData<List<Doctor>> {
+        return repository.getAll()
     }
 
-    /*init {
-        _listOfDoctors = liveData<List<Doctor>> {
-            repository.getAll()
-        } as MutableLiveData<List<Doctor>>
-        listOfDoctors = _listOfDoctors
-
-        Log.d("Kekpek2", listOfDoctors.value.toString())
-        Log.d("Kekpek3", _listOfDoctors.value.toString())
-
-    }*/
-
     fun save() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                edited.value?.let {
-                    repository.save(it)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            edited.value?.let {
+                repository.save(it)
             }
             edited.value = empty
         }
-        Log.d("Kekpek4", edited.value.toString())
     }
 
     fun changeContent(type: String, name: String, time: String) {

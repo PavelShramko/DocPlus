@@ -1,5 +1,6 @@
 package com.example.docplus.presentation.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.docplus.R
 import com.example.docplus.domain.Doctor
 import com.example.docplus.databinding.FragmentListDoctorBinding
+import com.example.docplus.di.DocPlusApp
 import com.example.docplus.presentation.adapters.DoctorsAdapter
 import com.example.docplus.presentation.adapters.OnInteractionListener
 import com.example.docplus.presentation.viewmodel.ListDoctorViewModel
@@ -19,11 +21,19 @@ class ListDoctorsFragment : Fragment() {
 
     private val viewModel: ListDoctorViewModel by viewModels()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val appComponent = (requireActivity().application as DocPlusApp).appComponent
+        appComponent.inject(viewModel)
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentListDoctorBinding.inflate(
             inflater,
             container,
@@ -45,10 +55,9 @@ class ListDoctorsFragment : Fragment() {
         })
 
         binding.rvDoctors.adapter = adapter
-        viewModel.listOfDoctors.observe(viewLifecycleOwner, { doctors ->
+        viewModel.getDoctorsLiveData().observe(viewLifecycleOwner, { doctors ->
             adapter.submitList(doctors)
         })
-        Log.d("Kekpek1", viewModel.listOfDoctors.value.toString())
 
         binding.addDoctorButton.setOnClickListener {
             findNavController().navigate(R.id.action_listDoctorsFragment_to_addDoctorFragment)

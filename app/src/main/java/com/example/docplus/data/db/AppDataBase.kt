@@ -11,7 +11,7 @@ import com.example.docplus.data.model.DoctorEntity
 @Database(entities = [DoctorEntity::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun docDao(): DoctorDao
+    abstract fun doctorDao(): DoctorDao
 
     companion object {
         @Volatile

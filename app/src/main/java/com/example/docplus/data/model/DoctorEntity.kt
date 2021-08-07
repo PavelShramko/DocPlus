@@ -13,7 +13,6 @@ data class DoctorEntity(
     var type: String,
     var name: String,
     var time: String
-    //var visits: List<Long>? = null
 ) : Serializable {
 
     fun toDto() = Doctor(id, type, name, time)

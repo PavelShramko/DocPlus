@@ -5,5 +5,4 @@ data class Doctor(
     var type: String,
     var name: String,
     var time: String
-    //var visits: List<Long>? = null
 )
