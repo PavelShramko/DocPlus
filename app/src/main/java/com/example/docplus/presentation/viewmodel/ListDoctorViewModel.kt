@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.docplus.domain.Doctor
 import com.example.docplus.domain.DoctorRepository
+import com.example.docplus.domain.useCase.UseCaseRemove
 import com.example.docplus.domain.useCase.UseCaseSaveAndEditDoctor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +26,9 @@ class ListDoctorViewModel: ViewModel() {
     @Inject
     lateinit var useCaseSaveAndEditDoctor: UseCaseSaveAndEditDoctor
 
+    @Inject
+    lateinit var useCaseRemove: UseCaseRemove
+
     //private val useCaseSaveAndEditDoctor = UseCaseSaveAndEditDoctor(repository)
 
     //val edited = MutableLiveData(empty)
@@ -38,11 +42,13 @@ class ListDoctorViewModel: ViewModel() {
     fun changeContent(type: String, name: String, time: String) =
         useCaseSaveAndEditDoctor.changeContent(type, name, time)
 
-    fun removeById(id: Long) = viewModelScope.launch {
+    /*fun removeById(id: Long) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             repository.removeById(id)
         }
-    }
+    }*/
+
+    fun removeById(id: Long) = useCaseRemove.removeById(id)
 
     fun edit(doctor: Doctor) {
         // юзкейс
