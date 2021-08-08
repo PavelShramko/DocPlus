@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.docplus.databinding.FragmentNewDoctorBinding
 import com.example.docplus.di.DocPlusApp
+import com.example.docplus.domain.useCase.UseCaseSaveAndEditDoctor
 import com.example.docplus.presentation.viewmodel.ListDoctorViewModel
 import com.example.docplus.utils.StringArgs
 
@@ -18,6 +19,10 @@ class AddDoctorFragment : Fragment() {
     companion object {
         var Bundle.textArg: String? by StringArgs
     }
+
+    /*val viewModel: ListDoctorViewModel by viewModels {
+        ListDoctorViewModelFactory(useCaseSaveAndEditDoctor)
+    }*/
 
     private val viewModel: ListDoctorViewModel by viewModels()
 

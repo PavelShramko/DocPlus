@@ -1,13 +1,10 @@
 package com.example.docplus.presentation.viewmodel
 
-import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.docplus.data.db.AppDataBase
-import com.example.docplus.data.repository.DoctorRepositoryImpl
-import com.example.docplus.di.DaggerAppComponent
 import com.example.docplus.domain.Doctor
 import com.example.docplus.domain.DoctorRepository
+import com.example.docplus.domain.useCase.UseCaseSaveAndEditDoctor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,13 +17,15 @@ private val empty = Doctor(
     time = ""
 )
 
-class ListDoctorViewModel(application: Application) : AndroidViewModel(application) {
-
-    val listOfDoctors: LiveData<List<Doctor>>
-        get() = getDoctorsLiveData()
+class ListDoctorViewModel(): ViewModel() {
 
     @Inject
     lateinit var repository: DoctorRepository
+
+    @Inject
+    lateinit var useCaseSaveAndEditDoctor: UseCaseSaveAndEditDoctor
+
+    //private val useCaseSaveAndEditDoctor = UseCaseSaveAndEditDoctor(repository)
 
     val edited = MutableLiveData(empty)
 
@@ -34,14 +33,7 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
         return repository.getAll()
     }
 
-    fun save() {
-        viewModelScope.launch(Dispatchers.IO) {
-            edited.value?.let {
-                repository.save(it)
-            }
-            edited.value = empty
-        }
-    }
+    fun save() = useCaseSaveAndEditDoctor.save()
 
     fun changeContent(type: String, name: String, time: String) {
         val editType = type.trim()
@@ -71,3 +63,12 @@ class ListDoctorViewModel(application: Application) : AndroidViewModel(applicati
         Log.d("kekpek", "${doctor.id} ${doctor.name}  ${doctor.type}")
     }
 }
+
+/*
+class ListDoctorViewModelFactory(
+    private val useCaseSaveAndEditDoctor: UseCaseSaveAndEditDoctor
+    ): ViewModelProvider.NewInstanceFactory() {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return  ListDoctorViewModel(useCaseSaveAndEditDoctor) as T
+    }
+}*/
