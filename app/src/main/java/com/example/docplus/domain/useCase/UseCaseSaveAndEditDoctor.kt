@@ -22,7 +22,7 @@ class UseCaseSaveAndEditDoctor @Inject constructor (
 
     val edited = MutableLiveData(empty)
 
-    val scope = CoroutineScope(Dispatchers.Default + Job())
+    val scope = CoroutineScope(Dispatchers.Main.immediate + Job())
 
     fun save() {
         scope.launch {

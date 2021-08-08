@@ -17,7 +17,7 @@ private val empty = Doctor(
     time = ""
 )
 
-class ListDoctorViewModel(): ViewModel() {
+class ListDoctorViewModel: ViewModel() {
 
     @Inject
     lateinit var repository: DoctorRepository
