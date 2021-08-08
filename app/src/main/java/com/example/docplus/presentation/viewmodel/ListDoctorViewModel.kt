@@ -27,7 +27,7 @@ class ListDoctorViewModel(): ViewModel() {
 
     //private val useCaseSaveAndEditDoctor = UseCaseSaveAndEditDoctor(repository)
 
-    val edited = MutableLiveData(empty)
+    //val edited = MutableLiveData(empty)
 
     fun getDoctorsLiveData(): LiveData<List<Doctor>> {
         return repository.getAll()
@@ -35,18 +35,8 @@ class ListDoctorViewModel(): ViewModel() {
 
     fun save() = useCaseSaveAndEditDoctor.save()
 
-    fun changeContent(type: String, name: String, time: String) {
-        val editType = type.trim()
-        val editName = name.trim()
-        val edinTime = time.trim()
-        if (edited.value?.type == editType &&
-            edited.value?.name == editName &&
-            edited.value?.time == edinTime
-        ) {
-            return
-        }
-        edited.value = edited.value?.copy(type = editType, name = editName, time = edinTime)
-    }
+    fun changeContent(type: String, name: String, time: String) =
+        useCaseSaveAndEditDoctor.changeContent(type, name, time)
 
     fun removeById(id: Long) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
