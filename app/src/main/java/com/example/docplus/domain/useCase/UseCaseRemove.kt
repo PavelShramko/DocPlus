@@ -6,7 +6,8 @@ import javax.inject.Inject
 
 
 class UseCaseRemove @Inject constructor (
-    private val repository: DoctorRepository
+    private val repository: DoctorRepository/*,
+    private val scope: CoroutineScope*/
 ) {
 
     val scope = CoroutineScope(Dispatchers.Default + Job())

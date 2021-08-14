@@ -17,12 +17,13 @@ private val empty = Doctor(
 )
 
 class UseCaseSaveAndEditDoctor @Inject constructor (
-    private val repository: DoctorRepository
+    private val repository: DoctorRepository/*,
+    private val scope: CoroutineScope*/
     ) {
 
-    val edited = MutableLiveData(empty)
+    private val edited = MutableLiveData(empty)
 
-    val scope = CoroutineScope(Dispatchers.Main.immediate + Job())
+    private val scope = CoroutineScope(Dispatchers.Main.immediate + Job())
 
     fun save() {
         scope.launch {
@@ -31,7 +32,8 @@ class UseCaseSaveAndEditDoctor @Inject constructor (
                     repository.save(it)
                 }
             }
-            edited.value = empty
+            // Попробовать через дефолтный поток с поствелью
+            edited.postValue(empty)
         }
     }
 

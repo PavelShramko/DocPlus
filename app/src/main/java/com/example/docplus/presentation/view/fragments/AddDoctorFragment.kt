@@ -37,7 +37,7 @@ class AddDoctorFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentNewDoctorBinding.inflate(
             inflater,
             container,
@@ -51,6 +51,7 @@ class AddDoctorFragment : Fragment() {
                 binding.enterData.text.toString()
             )
             viewModel.save()
+            // навигация и датабиндинг
             findNavController().navigateUp()
         }
         return binding.root
