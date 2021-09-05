@@ -47,6 +47,7 @@ class ListDoctorViewModel: ViewModel() {
     ) = useCaseSaveAndEditDoctor.updateContentById(id, type, name, time)
 
 
+
     // Функция, которая будет открывать историю посещений
     fun click(doctor: Doctor) {
         Log.d("kekpek", "${doctor.id} ${doctor.name}  ${doctor.type}")
