@@ -2,7 +2,6 @@ package com.example.docplus.presentation.view.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.docplus.R
 import com.example.docplus.domain.Doctor
 import com.example.docplus.databinding.FragmentListDoctorBinding
-import com.example.docplus.di.DocPlusApp
-import com.example.docplus.domain.useCase.UseCaseSaveAndEditDoctor
+import com.example.docplus.DocPlusApp
 import com.example.docplus.presentation.adapters.DoctorsAdapter
 import com.example.docplus.presentation.adapters.OnInteractionListener
 import com.example.docplus.presentation.viewmodel.ListDoctorViewModel
@@ -47,7 +45,12 @@ class ListDoctorsFragment : Fragment() {
             }
 
             override fun onEdit(doctor: Doctor) {
-                viewModel.edit(doctor)
+                val args = AddDoctorFragmentArgs(
+                    doctor.id.toString(),
+                    doctor.type,
+                    doctor.name,
+                    doctor.time).toBundle()
+                findNavController().navigate(R.id.action_listDoctorsFragment_to_addDoctorFragment, args)
             }
 
             override fun onRemove(doctor: Doctor) {

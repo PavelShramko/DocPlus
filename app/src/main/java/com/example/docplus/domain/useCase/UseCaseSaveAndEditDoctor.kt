@@ -37,6 +37,17 @@ class UseCaseSaveAndEditDoctor @Inject constructor (
         }
     }
 
+    fun updateContentById(
+        id: Long,
+        type: String,
+        name: String,
+        time: String
+    ) = scope.launch {
+        withContext(Dispatchers.IO) {
+            repository.updateContentById(id, type, name, time/*, visits*/)
+        }
+    }
+
     fun changeContent(type: String, name: String, time: String) {
         val editType = type.trim()
         val editName = name.trim()

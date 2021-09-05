@@ -18,7 +18,7 @@ interface DoctorDao {
     @Insert
     fun insert(doctor: DoctorEntity)
 
-    fun save(doctor: DoctorEntity) =
+    suspend fun save(doctor: DoctorEntity) =
         if (doctor.id == 0L) insert(doctor) else updateContentById(doctor.id, doctor.type, doctor.name, doctor.time)
 
     @Query("UPDATE DoctorEntity SET type = :type AND name = :name AND time = :time WHERE id = :id")

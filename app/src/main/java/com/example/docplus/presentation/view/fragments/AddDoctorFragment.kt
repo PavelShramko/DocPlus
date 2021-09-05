@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.docplus.databinding.FragmentNewDoctorBinding
-import com.example.docplus.di.DocPlusApp
-import com.example.docplus.domain.useCase.UseCaseSaveAndEditDoctor
+import com.example.docplus.DocPlusApp
 import com.example.docplus.presentation.viewmodel.ListDoctorViewModel
 import com.example.docplus.utils.StringArgs
 
@@ -20,6 +20,7 @@ class AddDoctorFragment : Fragment() {
         var Bundle.textArg: String? by StringArgs
     }
 
+    private val args by navArgs<AddDoctorFragmentArgs>()
     /*val viewModel: ListDoctorViewModel by viewModels {
         ListDoctorViewModelFactory(useCaseSaveAndEditDoctor)
     }*/
@@ -44,6 +45,10 @@ class AddDoctorFragment : Fragment() {
             false
         )
 
+        binding.enterDoctorType.setText(args.type)
+        binding.enterNameDoctor.setText(args.name)
+        binding.enterData.setText(args.data)
+
         binding.addDoctorButton.setOnClickListener {
             viewModel.changeContent(
                 binding.enterDoctorType.text.toString(),
@@ -51,6 +56,13 @@ class AddDoctorFragment : Fragment() {
                 binding.enterData.text.toString()
             )
             viewModel.save()
+
+            viewModel.edit(
+                args.id.toLong(),
+                binding.enterDoctorType.toString(),
+                binding.enterNameDoctor.toString(),
+                binding.enterData.toString()
+            )
             // навигация и датабиндинг
             findNavController().navigateUp()
         }

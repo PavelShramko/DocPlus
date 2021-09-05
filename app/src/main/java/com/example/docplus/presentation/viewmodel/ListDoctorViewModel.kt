@@ -29,10 +29,6 @@ class ListDoctorViewModel: ViewModel() {
     @Inject
     lateinit var useCaseRemove: UseCaseRemove
 
-    //private val useCaseSaveAndEditDoctor = UseCaseSaveAndEditDoctor(repository)
-
-    //val edited = MutableLiveData(empty)
-
     fun getDoctorsLiveData(): LiveData<List<Doctor>> {
         return repository.getAll()
     }
@@ -42,29 +38,16 @@ class ListDoctorViewModel: ViewModel() {
     fun changeContent(type: String, name: String, time: String) =
         useCaseSaveAndEditDoctor.changeContent(type, name, time)
 
-    /*fun removeById(id: Long) = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            repository.removeById(id)
-        }
-    }*/
-
     fun removeById(id: Long) = useCaseRemove.removeById(id)
 
-    fun edit(doctor: Doctor) {
-        // юзкейс
-    }
+    fun edit(id: Long,
+             type: String,
+             name: String,
+             time: String
+    ) = useCaseSaveAndEditDoctor.updateContentById(id, type, name, time)
 
     // Функция, которая будет открывать историю посещений
     fun click(doctor: Doctor) {
         Log.d("kekpek", "${doctor.id} ${doctor.name}  ${doctor.type}")
     }
 }
-
-/*
-class ListDoctorViewModelFactory(
-    private val useCaseSaveAndEditDoctor: UseCaseSaveAndEditDoctor
-    ): ViewModelProvider.NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return  ListDoctorViewModel(useCaseSaveAndEditDoctor) as T
-    }
-}*/
